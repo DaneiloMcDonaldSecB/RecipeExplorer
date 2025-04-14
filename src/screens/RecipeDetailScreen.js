@@ -1,15 +1,14 @@
 import React from "react";
-import { View, Text, Image, ScrollView, Button, Linking } from "react-native";
+import { View, Text, Image, ScrollView, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { addToFavorites, removeFromFavorites } from "../redux/recipeSlice";
-import { useThemeStyles } from "../styles/globalStyles"; 
+import { useThemeStyles } from "../styles/globalStyles";
 
 const RecipeDetailScreen = ({ route, navigation }) => {
-  // Ensure `recipe` exists
   if (!route.params || !route.params.recipe) {
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>Error: Recipe not found!</Text>
         <Button title="Go Back" onPress={() => navigation.goBack()} />
       </SafeAreaView>
@@ -20,35 +19,58 @@ const RecipeDetailScreen = ({ route, navigation }) => {
   const styles = useThemeStyles();
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.recipes.favorites);
-  const isFavorite = favorites.some((fav) => fav.uri === recipe.uri);
+  const isFavorite = favorites.some((fav) => fav.id === recipe.id);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.detailContainer}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }}>
+        <Text style={[styles.title, { marginBottom: 15 }]}>Recipe Details</Text>
+
         <Image source={{ uri: recipe.image }} style={styles.detailImage} />
-        <Text style={styles.detailTitle}>{recipe.label}</Text>
+        <Text style={[styles.detailTitle, { marginBottom: 10 }]}>{recipe.title}</Text>
 
-        <Button 
-          title={isFavorite ? "Remove from Favorites" : "Add to Favorites"} 
-          onPress={() => isFavorite ? dispatch(removeFromFavorites(recipe)) : dispatch(addToFavorites(recipe))}
+        <Button
+          title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+          onPress={() =>
+            isFavorite
+              ? dispatch(removeFromFavorites(recipe))
+              : dispatch(addToFavorites(recipe))
+          }
         />
 
-        <Text style={styles.subtitle}>Ingredients:</Text>
-        {recipe.ingredients?.map((ingredient, index) => (
-          <Text key={index} style={styles.ingredient}>
-            • {ingredient.text}
-          </Text>
-        ))}
+        {/* INGREDIENTS */}
+        {recipe.extendedIngredients?.length > 0 && (
+          <View style={{ marginTop: 25 }}>
+            <Text style={[styles.subtitle, { marginBottom: 10 }]}>🧂 Ingredients</Text>
+            <View>
+              {[...new Set(recipe.extendedIngredients.map((ing) => ing.original.trim()))]
+                .filter(Boolean)
+                .map((text, index) => (
+                  <View key={index} style={styles.bulletPoint}>
+                    <Text style={styles.bulletDot}>•</Text>
+                    <Text style={styles.bulletText}>{text}</Text>
+                  </View>
+                ))}
+            </View>
+          </View>
+        )}
 
-        <Button 
-          title="View Full Recipe" 
-          onPress={() => Linking.openURL(recipe.url)}
-        />
+        {/* INSTRUCTIONS */}
+        {recipe.analyzedInstructions?.[0]?.steps?.length > 0 && (
+          <View style={{ marginTop: 25 }}>
+            <Text style={[styles.subtitle, { marginBottom: 10 }]}>👨‍🍳 Instructions</Text>
+            {recipe.analyzedInstructions[0].steps.map((step, index) => (
+              <View key={index} style={styles.instructionRow}>
+                <Text style={styles.instructionNumber}>{index + 1}.</Text>
+                <Text style={styles.instructionText}>{step.step}</Text>
+              </View>
+            ))}
+          </View>
+        )}
 
-        <Button 
-          title="Go Back" 
-          onPress={() => navigation.goBack()}
-        />
+        <View style={{ marginTop: 30 }}>
+          <Button title="Go Back" onPress={() => navigation.goBack()} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

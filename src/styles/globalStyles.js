@@ -89,6 +89,7 @@ export const useThemeStyles = (forcedTheme = null) => {
     },
 
     // Recipe detail page container
+    // Recipe detail page container
     detailContainer: {
       flex: 1,
       padding: 20,
@@ -114,12 +115,59 @@ export const useThemeStyles = (forcedTheme = null) => {
       textAlign: "center",
       fontWeight: "bold",
       color: isDark ? "#AAAAAA" : "#666666",
+      marginTop: 20,
+      marginBottom: 10,
     },
-    
+
     ingredient: {
       fontSize: 16,
       marginBottom: 5,
       color: isDark ? "#DDDDDD" : "#000000",
     },
+
+    // Bullet list format (for ingredients or alternative display)
+    bulletPoint: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      marginBottom: 6,
+    },
+    
+    bulletDot: {
+      fontSize: 16,
+      width: 20,
+      textAlign: "center",
+      color: isDark ? "#FF9800" : "#FF5722",
+      marginTop: 2,
+    },
+    
+    bulletText: {
+      flex: 1,
+      fontSize: 16,
+      lineHeight: 22,
+      color: isDark ? "#DDDDDD" : "#000000",
+    },
+    
+    instructionRow: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      marginBottom: 10,
+    },
+    
+    instructionNumber: {
+      width: 30, // enough space for up to 3 digits
+      fontWeight: "bold",
+      textAlign: "right",
+      marginRight: 8,
+      marginTop: 2,
+      color: isDark ? "#FFAB40" : "#FF5722",
+    },
+    
+    instructionText: {
+      flex: 1,
+      fontSize: 16,
+      lineHeight: 22,
+      color: isDark ? "#DDDDDD" : "#000000",
+    },
+    
   });
 };

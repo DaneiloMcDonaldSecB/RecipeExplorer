@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, Switch, ActivityIndicator, Alert } from "react-native";
+import { View, Text, Switch, ActivityIndicator, Alert, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { setTheme } from "../redux/themeSlice";
+import { saveUserTheme } from "../redux/themeSlice";
 import { useThemeStyles } from "../styles/globalStyles";
 import { Button } from "react-native-paper";
 import { signOut } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../../config/firebaseConfig";
+import { auth } from "../../config/firebaseConfig";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const SettingsScreen = () => {
   const styles = useThemeStyles();
@@ -14,18 +14,9 @@ const SettingsScreen = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const toggleTheme = async () => {
+  const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
-    dispatch(setTheme(newTheme));
-  
-    const user = auth.currentUser;
-    if (user) {
-      try {
-        await setDoc(doc(db, "users", user.uid), { theme: newTheme }, { merge: true });
-      } catch (error) {
-        console.error("Error saving theme:", error);
-      }
-    }
+    dispatch(saveUserTheme(newTheme));
   };
 
   const handleLogout = async () => {
@@ -42,15 +33,63 @@ const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
+      {/* Logo */}
+      <Image
+        source={require("../../assets/logo.png")}
+        style={{
+          width: 100,
+          height: 100,
+          alignSelf: "center",
+          resizeMode: "contain",
+          marginBottom: 10,
+        }}
+      />
+
       <Text style={styles.title}>Settings</Text>
 
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 20 }}>
-        <Text style={{ color: theme === "dark" ? "#FFFFFF" : "#000000", fontSize: 18 }}>Dark Mode</Text>
+      {/* Dark Mode Toggle */}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginTop: 20,
+        }}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <MaterialIcons
+            name="brightness-6"
+            size={24}
+            color={theme === "dark" ? "#FFFFFF" : "#000000"}
+          />
+          <Text
+            style={{
+              color: theme === "dark" ? "#FFFFFF" : "#000000",
+              fontSize: 18,
+              marginLeft: 10,
+            }}
+          >
+            Dark Mode
+          </Text>
+        </View>
         <Switch value={theme === "dark"} onValueChange={toggleTheme} />
       </View>
 
-      <View style={{ marginTop: 40 }}>
-        <Button mode="contained" onPress={handleLogout} disabled={loading} style={styles.button}>
+      {/* Logout */}
+      <View
+        style={{
+          marginTop: 40,
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <MaterialIcons name="logout" size={24} color="#FF3B30" />
+        <Button
+          mode="contained"
+          onPress={handleLogout}
+          disabled={loading}
+          style={[styles.button, { flex: 1, marginLeft: 10 }]}
+        >
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (

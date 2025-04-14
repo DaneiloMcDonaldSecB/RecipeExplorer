@@ -26,6 +26,18 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+        {/* 🔥 Logo centered at the top */}
+        <Image
+          source={require("../../assets/logo.png")}
+          style={{
+            width: 100,
+            height: 100,
+            alignSelf: "center",
+            resizeMode: "contain",
+            marginBottom: 10,
+          }}
+        />
+
         <Text style={styles.title}>Find Your Favorite Recipes</Text>
 
         <TextInput
@@ -47,18 +59,18 @@ const HomeScreen = ({ navigation }) => {
 
         <FlatList
           data={recipes}
-          keyExtractor={(item) => item.recipe.uri}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.recipeCard}
               onPress={() =>
                 navigation.navigate("RecipeDetailScreen", {
-                  recipe: item.recipe,
+                  recipe: item,
                 })
               }
             >
-              <Image source={{ uri: item.recipe.image }} style={styles.image} />
-              <Text style={styles.recipeTitle}>{item.recipe.label}</Text>
+              <Image source={{ uri: item.image }} style={styles.image} />
+              <Text style={styles.recipeTitle}>{item.title}</Text>
             </TouchableOpacity>
           )}
         />

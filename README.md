@@ -20,7 +20,7 @@ Recipe Explorer is a cross-platform mobile application that allows users to sear
 
 - **Frontend:** React Native (Expo CLI)
 - **Backend:** Firebase (Firestore + Auth)
-- **Storage:** Firebase Firestore & AsyncStorage
+- **Storage:** Firebase Firestore 
 - **State Management:** Redux
 - **Navigation:** React Navigation
 

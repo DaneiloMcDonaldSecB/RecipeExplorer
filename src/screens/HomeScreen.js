@@ -26,7 +26,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* 🔥 Logo centered at the top */}
         <Image
           source={require("../../assets/logo.png")}
           style={{

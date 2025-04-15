@@ -87,8 +87,6 @@ export const useThemeStyles = (forcedTheme = null) => {
       height: 70,
       borderRadius: 10,
     },
-
-    // Recipe detail page container
     // Recipe detail page container
     detailContainer: {
       flex: 1,
@@ -125,7 +123,7 @@ export const useThemeStyles = (forcedTheme = null) => {
       color: isDark ? "#DDDDDD" : "#000000",
     },
 
-    // Bullet list format (for ingredients or alternative display)
+    // Bullet list format (for ingredients display)
     bulletPoint: {
       flexDirection: "row",
       alignItems: "flex-start",
@@ -154,7 +152,7 @@ export const useThemeStyles = (forcedTheme = null) => {
     },
     
     instructionNumber: {
-      width: 30, // enough space for up to 3 digits
+      width: 30, 
       fontWeight: "bold",
       textAlign: "right",
       marginRight: 8,

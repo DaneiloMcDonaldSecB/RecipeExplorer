@@ -1,4 +1,3 @@
-// screens/AuthScreen.js
 import React, { useState } from "react";
 import {
   View,
@@ -9,8 +8,12 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../config/firebaseConfig";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../config/firebaseConfig";
 import { useThemeStyles } from "../styles/globalStyles";
 
 const AuthScreen = ({ navigation }) => {
@@ -24,7 +27,19 @@ const AuthScreen = ({ navigation }) => {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredential.user;
+
+        await setDoc(doc(db, "users", user.uid), {
+          email: user.email,
+          theme: "light",
+          favorites: [],
+          createdAt: new Date(),
+        });
       }
     } catch (error) {
       Alert.alert("Authentication Error", error.message);

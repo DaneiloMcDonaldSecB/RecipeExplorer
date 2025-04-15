@@ -13,6 +13,7 @@ const SettingsScreen = () => {
   const theme = useSelector((state) => state.theme.theme);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true); 
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -47,42 +48,38 @@ const SettingsScreen = () => {
 
       <Text style={styles.title}>Settings</Text>
 
-      {/* Dark Mode Toggle */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginTop: 20,
-        }}
-      >
+      {/* Theme Toggle */}
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 20 }}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <MaterialIcons
-            name="brightness-6"
-            size={24}
-            color={theme === "dark" ? "#FFFFFF" : "#000000"}
-          />
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 18,
-              marginLeft: 10,
-            }}
-          >
+          <MaterialIcons name="brightness-6" size={24} color={theme === "dark" ? "#FFFFFF" : "#000000"} />
+          <Text style={{ color: theme === "dark" ? "#FFFFFF" : "#000000", fontSize: 18, marginLeft: 10 }}>
             Dark Mode
           </Text>
         </View>
         <Switch value={theme === "dark"} onValueChange={toggleTheme} />
       </View>
 
-      {/* Logout */}
-      <View
-        style={{
-          marginTop: 40,
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
+      {/* Notifications Toggle */}
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 20 }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <MaterialIcons name="notifications" size={24} color={theme === "dark" ? "#FFFFFF" : "#000000"} />
+          <Text style={{ color: theme === "dark" ? "#FFFFFF" : "#000000", fontSize: 18, marginLeft: 10 }}>
+            Notifications
+          </Text>
+        </View>
+        <Switch value={notificationsEnabled} onValueChange={() => setNotificationsEnabled(!notificationsEnabled)} />
+      </View>
+
+      {/* Account Info (Display only) */}
+      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20 }}>
+        <MaterialIcons name="account-circle" size={24} color={theme === "dark" ? "#FFFFFF" : "#000000"} />
+        <Text style={{ color: theme === "dark" ? "#FFFFFF" : "#000000", fontSize: 18, marginLeft: 10 }}>
+          {auth.currentUser?.email}
+        </Text>
+      </View>
+
+      {/* Logout Button */}
+      <View style={{ marginTop: 40, flexDirection: "row", alignItems: "center" }}>
         <MaterialIcons name="logout" size={24} color="#FF3B30" />
         <Button
           mode="contained"
@@ -90,11 +87,7 @@ const SettingsScreen = () => {
           disabled={loading}
           style={[styles.button, { flex: 1, marginLeft: 10 }]}
         >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>Logout</Text>
-          )}
+          {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Logout</Text>}
         </Button>
       </View>
     </View>
